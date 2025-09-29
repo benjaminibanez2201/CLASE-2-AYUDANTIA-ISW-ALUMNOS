@@ -4,6 +4,7 @@ import morgan from "morgan";
 import { AppDataSource, connectDB } from "./config/configDB.js";
 import { routerApi } from "./routes/index.routes.js";
 
+
 const app = express();
 app.use(express.json());
 app.use(morgan("dev"));

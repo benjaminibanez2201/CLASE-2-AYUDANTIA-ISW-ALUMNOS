@@ -18,3 +18,38 @@ export async function createUser(data) {
 export async function findUserByEmail(email) {
   return await userRepository.findOneBy({ email });
 }
+
+export async function findUserById(id) {
+  return await userRepository.findOneBy({ id });
+}
+
+export async function updateUser(id, data) {
+  const user = await findUserById(id);
+  if (!user) {
+    throw new Error("Usuario no encontrado");
+  }
+
+  const updateData = {};
+  
+  if (data.email) {
+    updateData.email = data.email;
+  }
+  
+  if (data.password) {
+    updateData.password = await bcrypt.hash(data.password, 10);
+  }
+
+  await userRepository.update(id, updateData);
+  
+  // Retornar el usuario actualizado
+  return await findUserById(id);
+}
+
+export async function deleteUser(id) {
+  const user = await findUserById(id);
+  if (!user) {
+    throw new Error("Usuario no encontrado");
+  }
+
+  return await userRepository.delete(id);
+}
